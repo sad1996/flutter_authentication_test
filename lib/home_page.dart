@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'login_page.dart';
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -19,8 +21,39 @@ class _HomePageState extends State<HomePage> {
               color: Colors.white,
             ),
             onPressed: () async {
-              SharedPreferences _pref = await SharedPreferences.getInstance();
-              _pref.clear();
+              showDialog(
+                  context: context,
+                  barrierDismissible: true,
+                  builder: (dialogContext) {
+                    return SimpleDialog(
+                      title: Text('Do you want to logout?'),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            FlatButton(
+                              child: Text('Cancel'),
+                              onPressed: () {
+                                Navigator.pop(dialogContext);
+                              },
+                            ),
+                            FlatButton(
+                              child: Text('Yes'),
+                              onPressed: () async {
+                                Navigator.pop(dialogContext);
+                                SharedPreferences _pref =
+                                    await SharedPreferences.getInstance();
+                                _pref.clear();
+                                Navigator.pushReplacement(
+                                    context, MaterialPageRoute(builder: (context) => LoginPage()));
+                              },
+                            )
+                          ],
+                        )
+                      ],
+                    );
+                  });
             },
           )
         ],
