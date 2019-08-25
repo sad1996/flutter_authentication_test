@@ -68,15 +68,15 @@ class _EmployeesPageState extends State<EmployeesPage> {
                 },
               ),
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: isLoading
-            ? null
-            : () {
+      floatingActionButton: isLoading
+          ? null
+          : FloatingActionButton(
+              onPressed: () {
                 Navigator.pushNamed(context, 'create_employee');
               },
-        backgroundColor: isLoading ? Colors.grey : Colors.red,
-        child: Icon(Icons.add),
-      ),
+              backgroundColor: isLoading ? Colors.grey : Colors.red,
+              child: Icon(Icons.add),
+            ),
     );
   }
 

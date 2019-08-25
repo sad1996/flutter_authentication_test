@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
 class Loader extends StatelessWidget {
-  Loader();
   @override
   Widget build(BuildContext context) {
     return Material(
       elevation: 10,
       borderRadius: BorderRadius.circular(10),
-      color: Colors.white54,
+      color: Colors.white70,
       child: Container(
         height: 70,
         width: 70,

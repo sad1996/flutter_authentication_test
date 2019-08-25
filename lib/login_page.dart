@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:syndicate_login/text_validators.dart';
 import 'home_page.dart';
 import 'package:http/http.dart' as http;
 
@@ -48,142 +49,144 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ],
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(left: 30),
-                child: Text(
-                  "Let's Start with Login!",
-                  style: textTheme.headline.copyWith(
-                      color: Colors.white, fontWeight: FontWeight.bold),
+          SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(left: 30),
+                  child: Text(
+                    "Let's Start with Login!",
+                    style: textTheme.headline.copyWith(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(30),
-                child: Material(
-                  elevation: 20,
-                  shadowColor: Colors.black45,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
-                  child: Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(30.0),
-                      child: Form(
-                          key: _form,
-                          autovalidate: _autovalidate,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: <Widget>[
-                              SizedBox(
-                                height: 30,
-                              ),
-                              TextFormField(
-                                controller: _emailController,
-                                validator: validateEmail,
-                                decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    prefixIcon: Icon(Icons.alternate_email),
-                                    labelText: 'Email',
-                                    hintText: 'Email'),
-                                onSaved: (text) {
-                                  setState(() {
-                                    _email = text;
-                                  });
-                                },
-                              ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              TextFormField(
-                                controller: _passwordController,
-                                validator: validatePassword,
-                                keyboardType: TextInputType.number,
-                                obscureText: obscure,
-                                decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    prefixIcon: Icon(Icons.lock_outline),
-                                    suffixIcon: IconButton(
-                                        icon: Icon(Icons.remove_red_eye,
-                                            color: obscure
-                                                ? theme.disabledColor
-                                                : Colors.redAccent),
-                                        onPressed: () {
-                                          setState(() {
-                                            obscure = !obscure;
-                                          });
-                                        }),
-                                    labelText: 'Password',
-                                    hintText: 'Password'),
-                                onSaved: (text) {
-                                  setState(() {
-                                    _password = text;
-                                  });
-                                },
-                              ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              RaisedButton(
-                                onPressed: onSubmitted,
-                                elevation: 15,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15.0),
-                                  child: Text(
-                                    'Login',
-                                    style: textTheme.subhead
-                                        .copyWith(color: Colors.white),
-                                  ),
+                Padding(
+                  padding: EdgeInsets.all(30),
+                  child: Material(
+                    elevation: 20,
+                    shadowColor: Colors.black45,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                    child: Container(
+                      child: Padding(
+                        padding: const EdgeInsets.all(30.0),
+                        child: Form(
+                            key: _form,
+                            autovalidate: _autovalidate,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: <Widget>[
+                                SizedBox(
+                                  height: 30,
                                 ),
-                                color: Colors.redAccent,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30)),
-                              ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              RaisedButton(
-                                onPressed: () {},
-                                elevation: 0,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15.0),
-                                  child: Text(
-                                    'Login with Google',
-                                    style: textTheme.subhead
-                                        .copyWith(color: Colors.redAccent),
-                                  ),
+                                TextFormField(
+                                  controller: _emailController,
+                                  validator: TextValidators.validateEmail,
+                                  decoration: InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      prefixIcon: Icon(Icons.alternate_email),
+                                      labelText: 'Email',
+                                      hintText: 'Email'),
+                                  onSaved: (text) {
+                                    setState(() {
+                                      _email = text;
+                                    });
+                                  },
                                 ),
-                                color: Colors.red.shade50,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30)),
-                              ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                            ],
-                          )),
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                TextFormField(
+                                  controller: _passwordController,
+                                  validator: TextValidators.validatePassword,
+                                  keyboardType: TextInputType.number,
+                                  obscureText: obscure,
+                                  decoration: InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      prefixIcon: Icon(Icons.lock_outline),
+                                      suffixIcon: IconButton(
+                                          icon: Icon(Icons.remove_red_eye,
+                                              color: obscure
+                                                  ? theme.disabledColor
+                                                  : Colors.redAccent),
+                                          onPressed: () {
+                                            setState(() {
+                                              obscure = !obscure;
+                                            });
+                                          }),
+                                      labelText: 'Password',
+                                      hintText: 'Password'),
+                                  onSaved: (text) {
+                                    setState(() {
+                                      _password = text;
+                                    });
+                                  },
+                                ),
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                RaisedButton(
+                                  onPressed: onSubmitted,
+                                  elevation: 15,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Text(
+                                      'Login',
+                                      style: textTheme.subhead
+                                          .copyWith(color: Colors.white),
+                                    ),
+                                  ),
+                                  color: Colors.redAccent,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30)),
+                                ),
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                RaisedButton(
+                                  onPressed: () {},
+                                  elevation: 0,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Text(
+                                      'Login with Google',
+                                      style: textTheme.subhead
+                                          .copyWith(color: Colors.redAccent),
+                                    ),
+                                  ),
+                                  color: Colors.red.shade50,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30)),
+                                ),
+                                SizedBox(
+                                  height: 30,
+                                ),
+                              ],
+                            )),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Text(
-                'I forgot password ?',
-                textAlign: TextAlign.center,
-                style: textTheme.body2,
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Text(
-                "I don't have an account",
-                textAlign: TextAlign.center,
-                style: textTheme.body2,
-              )
-            ],
+                SizedBox(
+                  height: 30,
+                ),
+                Text(
+                  'I forgot password ?',
+                  textAlign: TextAlign.center,
+                  style: textTheme.body2,
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Text(
+                  "I don't have an account",
+                  textAlign: TextAlign.center,
+                  style: textTheme.body2,
+                )
+              ],
+            ),
           ),
           isLoading ? Loader() : SizedBox()
         ],
@@ -208,25 +211,7 @@ class _LoginPageState extends State<LoginPage> {
         isLoading = true;
       });
       validateUser();
-//      SharedPreferences _pref = await SharedPreferences.getInstance();
-//      _pref.setString('email', _email);
-//      _pref.setString('password', _password);
     }
-  }
-
-  static String validateEmail(String value) {
-    Pattern pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regex = new RegExp(pattern);
-    if (!regex.hasMatch(value))
-      return 'Enter Valid Email';
-    else
-      return null;
-  }
-
-  static String validatePassword(String value) {
-    if (value.isEmpty || value.length < 8) return 'Enter valid password';
-    return null;
   }
 
   validateUser() {

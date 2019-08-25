@@ -62,15 +62,33 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
-      drawer: Drawer(),
+      drawer: Drawer(
+        child: SafeArea(
+          bottom: false,
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.asset('assets/logo.png')),
+              )
+            ],
+          ),
+        ),
+      ),
       body: Center(),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-//          Navigator.push(context,
-//              MaterialPageRoute(builder: (context) => EmployeesPage()));
-        Navigator.pushNamed(context, 'employees');
+          Navigator.pushNamed(context, 'employees');
         },
-        child: Icon(Icons.arrow_forward),
+        label: Row(
+          children: <Widget>[
+            Text('Employees'),
+            SizedBox(width: 10),
+            Icon(Icons.arrow_forward, size: 20,)
+          ],
+        ),
       ),
     );
   }
