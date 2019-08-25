@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'create_employee_page.dart';
+import 'employees_page.dart';
 import 'home_page.dart';
 import 'login_page.dart';
 
@@ -27,6 +29,10 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           primarySwatch: Colors.red,
         ),
+        routes: {
+          'employees': (context) => EmployeesPage(),
+          'create_employee': (context) => CreateEmployeePage(),
+        },
         home: isValidated ? HomePage() : LoginPage());
   }
 
@@ -43,5 +49,4 @@ class _MyAppState extends State<MyApp> {
       return false;
     }
   }
-
 }

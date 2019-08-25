@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'employees_page.dart';
 import 'login_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -27,7 +28,8 @@ class _HomePageState extends State<HomePage> {
                   builder: (dialogContext) {
                     return SimpleDialog(
                       title: Text('Do you want to logout?'),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
                       children: <Widget>[
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -46,7 +48,9 @@ class _HomePageState extends State<HomePage> {
                                     await SharedPreferences.getInstance();
                                 _pref.clear();
                                 Navigator.pushReplacement(
-                                    context, MaterialPageRoute(builder: (context) => LoginPage()));
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => LoginPage()));
                               },
                             )
                           ],
@@ -60,6 +64,14 @@ class _HomePageState extends State<HomePage> {
       ),
       drawer: Drawer(),
       body: Center(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+//          Navigator.push(context,
+//              MaterialPageRoute(builder: (context) => EmployeesPage()));
+        Navigator.pushNamed(context, 'employees');
+        },
+        child: Icon(Icons.arrow_forward),
+      ),
     );
   }
 }
