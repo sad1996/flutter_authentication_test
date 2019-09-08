@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'create_employee_page.dart';
-import 'employees_page.dart';
-import 'home_page.dart';
-import 'login_page.dart';
+import 'view/create_employee_page.dart';
+import 'view/employees_page.dart';
+import 'view/home_page.dart';
+import 'view/login_page.dart';
 
 void main() => runApp(MyApp());
 

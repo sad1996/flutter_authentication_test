@@ -18,4 +18,16 @@ class TextValidators {
     if (value.isEmpty) return '*Mandatory field';
     return null;
   }
+
+  static String validateAddress(String value) {
+    if (value.isEmpty) return '*Mandatory field';
+    if(value.length < 10) return '*Address should be atleast 10 charecters long.';
+    return null;
+  }
+
+  static String validatePhone(String value) {
+    if (value.isEmpty) return '*Mandatory field';
+    if(value.length != 10) return '*Invalid Mobile Number';
+    return null;
+  }
 }

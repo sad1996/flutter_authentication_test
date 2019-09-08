@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:syndicate_login/text_validators.dart';
+import 'package:syndicate_login/utils/text_validators.dart';
 import 'home_page.dart';
 import 'package:http/http.dart' as http;
 
-import 'http_handler.dart';
-import 'loader.dart';
+import '../utils/http_handler.dart';
+import '../widget/loader.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);

@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:http/http.dart' as http;
 
-import 'employee.dart';
-import 'loader.dart';
+import '../model/employee.dart';
+import '../widget/loader.dart';
 
 class EmployeesPage extends StatefulWidget {
   @override
@@ -53,10 +53,8 @@ class _EmployeesPageState extends State<EmployeesPage> {
                           width: 50,
                         ),
                       ),
-                      title: Text(employee.employeeName),
-                      subtitle: Text(employee.employeeSalary +
-                          '\n' +
-                          employee.employeeAge),
+                      title: Text(employee.name),
+                      subtitle: Text(employee.email + '\n' + employee.mobile),
                     ),
                     color: index.isEven ? Colors.grey.shade100 : Colors.white,
                   );
@@ -81,13 +79,16 @@ class _EmployeesPageState extends State<EmployeesPage> {
   }
 
   getEmployees() async {
-    await http
-        .get('http://dummy.restapiexample.com/api/v1/employees')
+    Map<String, String> data = {'action': 'READALL'};
+
+    await Dio()
+        .post('https://webapp.syndicatebank.in/api/employees.php',
+            data: FormData.from(data))
         .then((response) {
       if (response != null) {
         print(response.statusCode);
-        print(response.body);
-        List<dynamic> list = json.decode(response.body);
+        print(response.data);
+        List<dynamic> list = json.decode(response.data)['data'];
         setState(() {
           empList = list.map<Employee>((jsonItem) {
             return Employee.fromJson(jsonItem);
