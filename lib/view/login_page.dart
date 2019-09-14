@@ -4,7 +4,6 @@ import 'package:syndicate_login/utils/text_validators.dart';
 import 'home_page.dart';
 import 'package:http/http.dart' as http;
 
-import '../utils/http_handler.dart';
 import '../widget/loader.dart';
 
 class LoginPage extends StatefulWidget {
@@ -15,7 +14,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool obscure = false;
+  bool obscure = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _form = new GlobalKey<FormState>();
   bool _autovalidate = false;
@@ -101,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
                                 TextFormField(
                                   controller: _passwordController,
                                   validator: TextValidators.validatePassword,
-                                  keyboardType: TextInputType.number,
+                                  keyboardType: TextInputType.text,
                                   obscureText: obscure,
                                   decoration: InputDecoration(
                                       border: OutlineInputBorder(),

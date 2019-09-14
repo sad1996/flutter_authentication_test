@@ -19,6 +19,11 @@ dependencies:
   intl: ^0.16.0
   geolocator: ^5.0.1
   image_picker_modern: ^0.4.12+3
+  async_resource: ^0.1.4
+  path_provider: any
+  sqflite: ^1.1.6
+  flutter_slidable: ^0.5.3
+  share: ^0.6.2+1
 
 dev_dependencies:
   flutter_test:

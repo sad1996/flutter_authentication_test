@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'view/create_employee_page.dart';
-import 'view/employees_page.dart';
+import 'view/employee_page.dart';
 import 'view/home_page.dart';
 import 'view/login_page.dart';
 
@@ -30,7 +30,7 @@ class _MyAppState extends State<MyApp> {
           primarySwatch: Colors.red,
         ),
         routes: {
-          'employees': (context) => EmployeesPage(),
+          'employees': (context) => EmployeePage(),
           'create_employee': (context) => CreateEmployeePage(),
         },
         home: isValidated ? HomePage() : LoginPage());

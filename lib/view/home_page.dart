@@ -1,14 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:syndicate_login/database/database.dart';
 import 'package:syndicate_login/model/employee.dart';
-
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:syndicate_login/view/employee_page.dart';
 import '../widget/loader.dart';
 import 'login_page.dart';
 
@@ -125,27 +126,72 @@ class _HomePageState extends State<HomePage> {
                     itemCount: empList.length,
                     itemBuilder: (context, index) {
                       Employee employee = empList[index];
-                      return Container(
-                        child: ListTile(
-                          isThreeLine: true,
-                          leading: Material(
-                            shape: CircleBorder(
-                                side: BorderSide(color: Colors.redAccent)),
-                            child: ClipOval(
-                              child: Image.memory(
-                                base64Decode(employee.avatar),
-                                height: 50,
-                                width: 50,
-                                fit: BoxFit.cover,
+                      return Slidable(
+                        actionPane: SlidableDrawerActionPane(),
+                        actionExtentRatio: 0.25,
+                        child: Container(
+                          child: ListTile(
+                            isThreeLine: true,
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          EmployeePage(employee: employee)));
+                            },
+                            leading: Hero(
+                              tag: employee.id,
+                              child: Material(
+                                shape: CircleBorder(
+                                    side: BorderSide(color: Colors.redAccent)),
+                                child: ClipOval(
+                                  child: Image.memory(
+                                    base64Decode(employee.avatar),
+                                    height: 50,
+                                    width: 50,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
                             ),
+                            title: Text(employee.name),
+                            subtitle:
+                                Text(employee.email + '\n' + employee.mobile),
                           ),
-                          title: Text(employee.name),
-                          subtitle:
-                              Text(employee.email + '\n' + employee.mobile),
+                          color: index.isEven
+                              ? Colors.grey.shade100
+                              : Colors.white,
                         ),
-                        color:
-                            index.isEven ? Colors.grey.shade100 : Colors.white,
+                        actions: <Widget>[
+                          IconSlideAction(
+                            caption: 'Share',
+                            color: Colors.indigo,
+                            icon: Icons.share,
+                            onTap: () {
+                              Share.share(
+                                  employee.name + ', ' + employee.mobile);
+                            },
+                          ),
+                        ],
+                        secondaryActions: <Widget>[
+                          IconSlideAction(
+                            caption: 'Delete',
+                            color: Colors.red,
+                            icon: Icons.delete,
+                            onTap: () async {
+                              await SyndicateDatabase.get()
+                                  .removeEmployeeData(employee.id.toString())
+                                  .then((_) {
+                                setState(() {
+                                  empList.removeAt(index);
+                                });
+                                Scaffold.of(context).showSnackBar(SnackBar(
+                                    content: Text(
+                                        "Employee ${employee.name} has been removed.")));
+                              });
+                            },
+                          ),
+                        ],
                       );
                     },
                     separatorBuilder: (BuildContext context, int index) {
@@ -192,25 +238,55 @@ class _HomePageState extends State<HomePage> {
     }).toSet();
   }
 
-  getEmployees() async {
-    Map<String, String> data = {'action': 'READALL'};
+  getEmployees({bool forceReload}) async {
+    if (forceReload == null) {
+      await databaseCall();
+    } else if (forceReload) {
+      empList.clear();
+    }
 
+    if (empList.length == 0) {
+      apiCall();
+    } else {
+      setState(() {
+        if (completer != null) {
+          completer.complete(null);
+        }
+        isLoading = false;
+      });
+    }
+  }
+
+  databaseCall() async {
+    await SyndicateDatabase.get().getEmployeeList().then((list) {
+      setState(() {
+        empList = list;
+      });
+    });
+  }
+
+  apiCall() async {
+    Map<String, String> data = {'action': 'READALL'};
     await Dio()
         .post('https://webapp.syndicatebank.in/api/employees.php',
             data: FormData.from(data))
-        .then((response) {
+        .then((response) async {
       if (response != null) {
-        print(response.statusCode);
         print(response.data);
         List<dynamic> list = json.decode(response.data)['data'];
         setState(() {
           empList = list.map<Employee>((jsonItem) {
             return Employee.fromJson(jsonItem);
           }).toList();
-          if (completer != null) {
-            completer.complete(null);
-          }
-          isLoading = false;
+        });
+        await SyndicateDatabase.get().truncateEmloyeesTable();
+        await SyndicateDatabase.get().insertEmployees(empList).then((_) {
+          setState(() {
+            if (completer != null) {
+              completer.complete(null);
+            }
+            isLoading = false;
+          });
         });
       } else {
         print('Response is null');
@@ -220,7 +296,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<Null> _handleRefresh() async {
     completer = new Completer<Null>();
-    await getEmployees();
+    await getEmployees(forceReload: true);
     return completer.future.then((_) {});
   }
 }

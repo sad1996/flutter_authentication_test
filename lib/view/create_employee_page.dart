@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:syndicate_login/database/database.dart';
 import 'package:syndicate_login/model/employee.dart';
 import 'package:syndicate_login/utils/text_validators.dart';
 import 'package:image_picker_modern/image_picker_modern.dart';
@@ -377,30 +378,15 @@ class _CreateEmployeePageState extends State<CreateEmployeePage> {
         });
         form.save();
         print(employee.toJson());
-        postEmployee();
+        saveInDatabase();
       }
     }
   }
 
-  postEmployee() async {
-    setState(() {
-      isLoading = true;
-    });
-    Map<String, dynamic> data = {'action': 'CREATE'};
-    data.addEntries(employee.toJson().entries);
-
-    await Dio()
-        .post('https://webapp.syndicatebank.in/api/employees.php',
-            data: FormData.from(data))
-        .then((response) {
-      if (response != null) {
-        Map data = json.decode(response.data);
-        print(response.statusCode);
-        print(data);
-
-        if (data['error'] == null && data['code'] == '-99') {
-          _scaffoldKey.currentState.showSnackBar(SnackBar(
-            content: Text(data['msg']),
+  saveInDatabase() async {
+    await SyndicateDatabase.get().insertEmployeeData(employee).then((_){
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+            content: Text('Employee Inserted'),
           ));
           Future.delayed(Duration(seconds: 2), () {
             setState(() {
@@ -408,17 +394,46 @@ class _CreateEmployeePageState extends State<CreateEmployeePage> {
             });
             Navigator.pop(context, 'refresh');
           });
-        } else {
-          _scaffoldKey.currentState.showSnackBar(SnackBar(
-            content: Text(data['error']),
-          ));
-          setState(() {
-            isLoading = false;
-          });
-        }
-      } else {
-        print('Response is null');
-      }
     });
   }
+
+//  postEmployee() async {
+//    setState(() {
+//      isLoading = true;
+//    });
+//    Map<String, dynamic> data = {'action': 'CREATE'};
+//    data.addEntries(employee.toJson().entries);
+//
+//    await Dio()
+//        .post('https://webapp.syndicatebank.in/api/employees.php',
+//            data: FormData.from(data))
+//        .then((response) {
+//      if (response != null) {
+//        Map data = json.decode(response.data);
+//        print(response.statusCode);
+//        print(data);
+//
+//        if (data['error'] == null && data['code'] == '-99') {
+//          _scaffoldKey.currentState.showSnackBar(SnackBar(
+//            content: Text(data['msg']),
+//          ));
+//          Future.delayed(Duration(seconds: 2), () {
+//            setState(() {
+//              isLoading = false;
+//            });
+//            Navigator.pop(context, 'refresh');
+//          });
+//        } else {
+//          _scaffoldKey.currentState.showSnackBar(SnackBar(
+//            content: Text(data['error']),
+//          ));
+//          setState(() {
+//            isLoading = false;
+//          });
+//        }
+//      } else {
+//        print('Response is null');
+//      }
+//    });
+//  }
 }

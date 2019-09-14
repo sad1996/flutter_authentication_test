@@ -21,6 +21,8 @@ PODS:
     - Flutter
   - path_provider (0.0.1):
     - Flutter
+  - share (0.5.2):
+    - Flutter
   - shared_preferences (0.0.1):
     - Flutter
   - sqflite (0.0.1):
@@ -28,13 +30,14 @@ PODS:
     - FMDB (~> 2.7.2)
 
 DEPENDENCIES:
-  - Flutter (from `.symlinks/flutter/ios`)
+  - Flutter (from `.symlinks/flutter/ios-release`)
   - geolocator (from `.symlinks/plugins/geolocator/ios`)
   - google_api_availability (from `.symlinks/plugins/google_api_availability/ios`)
   - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
   - image_picker_modern (from `.symlinks/plugins/image_picker_modern/ios`)
   - location_permissions (from `.symlinks/plugins/location_permissions/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - share (from `.symlinks/plugins/share/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
 
@@ -45,7 +48,7 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   Flutter:
-    :path: ".symlinks/flutter/ios"
+    :path: ".symlinks/flutter/ios-release"
   geolocator:
     :path: ".symlinks/plugins/geolocator/ios"
   google_api_availability:
@@ -58,13 +61,15 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/location_permissions/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
+  share:
+    :path: ".symlinks/plugins/share/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
 
 SPEC CHECKSUMS:
-  Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   geolocator: 2d5da6891d865c0f1b4f851683eed890dd9c8bc1
   google_api_availability: 163b30f802e6148c67f092aa4501c90ddd8eec8d
@@ -73,6 +78,7 @@ SPEC CHECKSUMS:
   image_picker_modern: 40bc7d164e23451a0417e302e514746a2b81c269
   location_permissions: 67cfaff583afbb027a9f9248196f4b79c40f3cdc
   path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259
+  share: 7d22fe8baedfe93aefd864bf0b73f29711fbb0a3
   shared_preferences: 1feebfa37bb57264736e16865e7ffae7fc99b523
   sqflite: ff1d9da63c06588cc8d1faf7256d741f16989d5a
 
