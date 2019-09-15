@@ -240,13 +240,18 @@ class _HomePageState extends State<HomePage> {
 
   getEmployees({bool forceReload}) async {
     if (forceReload == null) {
-      await databaseCall();
+      await SyndicateDatabase.get().getEmployeeList().then((list) {
+        if(list!=null)
+        setState(() {
+          empList = list;
+        });
+      });
     } else if (forceReload) {
       empList.clear();
     }
 
     if (empList.length == 0) {
-      apiCall();
+      await apiCall();
     } else {
       setState(() {
         if (completer != null) {
@@ -257,15 +262,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  databaseCall() async {
-    await SyndicateDatabase.get().getEmployeeList().then((list) {
-      setState(() {
-        empList = list;
-      });
-    });
-  }
-
-  apiCall() async {
+  Future apiCall() async {
     Map<String, String> data = {'action': 'READALL'};
     await Dio()
         .post('https://webapp.syndicatebank.in/api/employees.php',

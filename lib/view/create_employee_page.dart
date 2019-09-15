@@ -1,9 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -29,9 +26,11 @@ class _CreateEmployeePageState extends State<CreateEmployeePage> {
   File avatar;
   DateTime selectedDate;
   LatLng latLng;
+  TextEditingController addressController = new TextEditingController();
   TextEditingController dobController = new TextEditingController();
   TextEditingController latLongController = new TextEditingController();
   Employee employee = new Employee();
+  FocusNode focusNode = new FocusNode();
 
   captureImage(ImageSource source) async {
     await ImagePicker.pickImage(source: source, maxHeight: 200)
@@ -53,6 +52,13 @@ class _CreateEmployeePageState extends State<CreateEmployeePage> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    addressController.text = 'Bangalore';
+  }
+
+  @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final TextTheme textTheme = theme.textTheme;
@@ -62,6 +68,16 @@ class _CreateEmployeePageState extends State<CreateEmployeePage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('Create Employee'),
+        actions: <Widget>[
+          if (focusNode.hasFocus)
+            IconButton(
+              tooltip: 'Hide Keyboard',
+              icon: Icon(Icons.keyboard_hide),
+              onPressed: () {
+                FocusScope.of(context).requestFocus(new FocusNode());
+              },
+            )
+        ],
       ),
       body: Stack(
         alignment: Alignment.center,
@@ -189,9 +205,11 @@ class _CreateEmployeePageState extends State<CreateEmployeePage> {
                                 TextFormField(
                                   validator: TextValidators.validatePhone,
                                   keyboardType: TextInputType.number,
+                                  focusNode: focusNode,
                                   decoration: InputDecoration(
                                       border: UnderlineInputBorder(),
                                       prefixIcon: Icon(Icons.phone),
+                                      prefixText: '+91 ',
                                       labelText: 'Mobile',
                                       hintText: 'Mobile'),
                                   maxLength: 10,
@@ -254,6 +272,7 @@ class _CreateEmployeePageState extends State<CreateEmployeePage> {
                                             prefixIcon:
                                                 Icon(Icons.calendar_today),
                                             labelText: 'DOB',
+                                            suffixText: 'dd-MM-yyyy ',
                                             hintText: 'DOB'),
                                         onSaved: (text) {
                                           setState(() {
@@ -270,6 +289,7 @@ class _CreateEmployeePageState extends State<CreateEmployeePage> {
                                   validator: TextValidators.validateAddress,
                                   keyboardType: TextInputType.emailAddress,
                                   maxLines: null,
+                                  controller: addressController,
                                   decoration: InputDecoration(
                                       border: UnderlineInputBorder(),
                                       prefixIcon: Icon(Icons.home),
@@ -384,16 +404,16 @@ class _CreateEmployeePageState extends State<CreateEmployeePage> {
   }
 
   saveInDatabase() async {
-    await SyndicateDatabase.get().insertEmployeeData(employee).then((_){
+    await SyndicateDatabase.get().insertEmployeeData(employee).then((_) {
       _scaffoldKey.currentState.showSnackBar(SnackBar(
-            content: Text('Employee Inserted'),
-          ));
-          Future.delayed(Duration(seconds: 2), () {
-            setState(() {
-              isLoading = false;
-            });
-            Navigator.pop(context, 'refresh');
-          });
+        content: Text('Employee Inserted'),
+      ));
+      Future.delayed(Duration(seconds: 2), () {
+        setState(() {
+          isLoading = false;
+        });
+        Navigator.pop(context, 'refresh');
+      });
     });
   }
 

@@ -108,12 +108,17 @@ class SyndicateDatabase {
 
   Future<List<Employee>> getEmployeeList() async {
     var db = await _getDb();
-    var result = await db.rawQuery('SELECT DISTINCT * FROM $TABLE_EMPLOYEE ORDER BY ${Employee.db_id}');
-    List<Employee> empList = List();
-    for (int i = 0; i < result.length; i++) {
-      empList.add(Employee.map(result[i]));
+    var result = await db.rawQuery(
+        'SELECT DISTINCT * FROM $TABLE_EMPLOYEE ORDER BY ${Employee.db_id}');
+    if (result.length == 0) {
+      return null;
+    } else {
+      List<Employee> empList = List();
+      for (int i = 0; i < result.length; i++) {
+        empList.add(Employee.map(result[i]));
+      }
+      return empList;
     }
-    return empList;
   }
 
   Future dropEmployeesTable() async {
